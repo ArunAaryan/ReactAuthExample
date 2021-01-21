@@ -1,16 +1,18 @@
 import { createContext } from "react";
 import React, { Component } from "react";
-const login = () => {
-  fetch("https://60091f550a54690017fc2bcf.mockapi.io/login")
-    .then((response) => response.json())
-    .then((json) => {
-      console.log(json);
-      localStorage.setItem("access_token", json.access_token);
-    });
+let isAuthenticated = false;
+const setAuthenticated = () => {
+  if (isToken()) {
+    isAuthenticated = true;
+  }
 };
-
+const checkAuthenticated = () => {
+  setAuthenticated();
+  return isAuthenticated;
+};
 const logout = () => {
   localStorage.removeItem("access_token");
+  isAuthenticated = false;
 };
 
 const getUser = async () => {
@@ -21,4 +23,9 @@ const getUser = async () => {
   return data;
 };
 
-export { login, logout, getUser };
+const isToken = () => {
+  let token = localStorage.getItem("access_token");
+  return token;
+};
+
+export { logout, getUser, isToken, setAuthenticated, checkAuthenticated };
